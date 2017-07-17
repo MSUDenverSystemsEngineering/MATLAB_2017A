@@ -137,7 +137,8 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		Execute-Process -Path "$dirFiles\R2017a\setup.exe" -Parameters "-inputFile `"$dirSupportFiles\installer_input.txt`" -activationPropertiesFile `"$dirSupportFiles\activate.ini`"" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "$dirFiles\R2017a\setup.exe" -Parameters "-inputFile `"$dirSupportFiles\installer_input.txt`" -activationPropertiesFile `"$dirSupportFiles\activate.ini`"" -WindowStyle "Hidden" -PassThru
+		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
 		##* POST-INSTALLATION
@@ -182,7 +183,8 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-		Execute-Process -Path "$envProgramFiles\MATLAB\R2017a\uninstall\bin\win64\uninstall.exe" -Parameters "-inputFile `"$dirSupportFiles\uninstaller_input.txt`""
+		$exitCode = Execute-Process -Path "$envProgramFiles\MATLAB\R2017a\uninstall\bin\win64\uninstall.exe" -Parameters "-inputFile `"$dirSupportFiles\uninstaller_input.txt`"" -PassThru
+		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
 		##* POST-UNINSTALLATION
